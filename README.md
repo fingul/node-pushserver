@@ -24,7 +24,7 @@ $ npm install node-pushserver -g
 + From git:
 
 ```shell
-$ git clone git://github.com/Smile-SA/node-pushserver.git
+$ git clone git@github.com:fingul/node-pushserver.git
 $ cd node-pushserver
 $ npm install -g
 ```
