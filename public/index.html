@@ -64,13 +64,18 @@
                         <label class="control-label" for="androidOptions">Payload: </label>
 
                         <div class="controls">
-                            <textarea id="androidOptions" name="androidOptions" class="json-textarea source input-xlarge">
+                            <textarea id="androidOptions" name="androidOptions"
+                                      class="json-textarea source input-xlarge">
+
 {
     "collapseKey": "optional",
     "data": {
-        "message": "You message here"
+      "title":"제목입니다.",
+      "message": "내용입니다.",
+      "url":"https://google.com?q=test"
     }
 }
+
                             </textarea>
                         </div>
                     </div>
@@ -111,9 +116,9 @@
 <script src="lib/toastr-1.0.2.js"></script>
 
 <script>
-    (function() {
+    (function () {
         // Init code mirror
-        $('.json-textarea').each(function() {
+        $('.json-textarea').each(function () {
             $(this).attr('autocapitalize', 'off')
                     .attr('autocorrect', 'off')
                     .attr('required', true);
@@ -126,25 +131,25 @@
                 theme: 'elegant'
             });
             editor.setSize('100%', '150px');
-            $(this).parent().siblings('label').click(function() {
+            $(this).parent().siblings('label').click(function () {
                 editor.focus();
             });
         });
 
         // Init select2
         $("#users").select2({
-                    tokenSeparators: [",", " "],
-                    placeholder: "(Optional, defaults to everyone)"
-                });
+            tokenSeparators: [",", " "],
+            placeholder: "(Optional, defaults to everyone)"
+        });
 
         // Init user list
         toastr.info('Loading users...')
-        $.get('/users', function(data) {
+        $.get('/users', function (data) {
             var users = data.users,
-                usersSelect = $('#users');
+                    usersSelect = $('#users');
 
-            users.forEach(function(user) {
-               usersSelect.append(new Option(user));
+            users.forEach(function (user) {
+                usersSelect.append(new Option(user));
             });
             toastr.success('Users loaded !');
         });
@@ -181,14 +186,14 @@
         function sendPush(formValues) {
             var pushNotification = {};
 
-            if(formValues.users)
+            if (formValues.users)
                 pushNotification.users = [].concat(formValues.users);
 
-            if(isJSON(formValues.androidOptions))
-                pushNotification.android= JSON.parse(formValues.androidOptions);
+            if (isJSON(formValues.androidOptions))
+                pushNotification.android = JSON.parse(formValues.androidOptions);
 
-            if(isJSON(formValues.iosOptions))
-                pushNotification.ios= JSON.parse(formValues.iosOptions);
+            if (isJSON(formValues.iosOptions))
+                pushNotification.ios = JSON.parse(formValues.iosOptions);
 
             $.ajax({
                 url: '/send',
@@ -196,10 +201,10 @@
                 data: JSON.stringify(pushNotification),
                 contentType: 'application/json',
                 dataType: 'json',
-                success: function(msg) {
+                success: function (msg) {
                     toastr.success('Push message successfully sent!');
                 },
-                error: function() {
+                error: function () {
                     toastr.error('Failed to send push message');
                     console.dir(arguments);
                 }
